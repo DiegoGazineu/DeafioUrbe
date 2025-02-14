@@ -1,40 +1,56 @@
 import { useState, useEffect } from 'react'
-
+import axios from 'axios'
 
 function App() 
 {
-  const [data, setData] = useState([])
+  const [postsData, setPostsData] = useState([])
 
-  useEffect(()=> {
-    async function fetchData() 
+
+  const endpoint = `${import.meta.env.VITE_API_URL}posts/`
+
+  const fetchData = async() =>
+  {
+    console.log('fetching...')
+    const response = await axios.get(endpoint)
+    console.log(response)
+    const {data} = response
+    setPostsData(data)
+    console.log(data)
+    return data
+  }
+
+  const postData = async() =>
+  {
+    const name = 'test x'
+    const description = 'test x description'
+    const body = {name, description}
+
+    const response = await axios.post(endpoint, body)
+    console.log(response)
+    return response.data
+  }
+
+  const handleSendData = async() => 
+  {
+    const newData = await postData()
+    if (newData)
     {
-      console.log('hello world')
-      console.log(import.meta.env.VITE_API_URL)
-      try
-      {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}posts`);
-        if (!response.ok)
-        {
-          throw new Error('Network response was not ok');
-        }
-        const result = await response.json();
-        console.log(result)
-        setData(result);
-      }
-      catch (error)
-      {
-        console.error('Error fetching data:', error);
-      }
+      setPostsData(prevState => [...prevState, newData])
     }
-
-
-    fetchData();
     
-  }, []);
+  }
+
+  useEffect(() =>
+  {
+    fetchData()
+  }, [])
 
   return (
     <>
-      hello world
+      <ul>
+        {postsData.map(el => <li key={el.id}>{el.name}</li>)}
+      </ul>
+      <button onClick={handleSendData}>Create data</button>
     </>
   )
 }
