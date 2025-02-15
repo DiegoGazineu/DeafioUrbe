@@ -4,20 +4,14 @@ python -m venv env
 
 # Ativar o ambiente virtual
 
-cd env/Scripts/activate
+env/scripts/activate
 
-# Voltar para a raiz do projeto
-
-cd ..
 
 # 2) Instalar dependências do backend
 
-pip install -r .backend/requirements.txt
+pip install -r ./backend/requirements.txt
 
 # 3) Iniciar o backend
-
-
-# Lembre-se de substituir o valor de 'user_agent' no arquivo backend/DesafioUrbe/backend/posts/views.py, linha 55 pelo seu user agent https://www.whatismybrowser.com/detect/what-is-my-user-agent/
 
 # Navegar para o diretório do backend
 
@@ -25,7 +19,6 @@ cd backend
 
 # Executar as migrações
 
-python manage.py makemigrations
 python manage.py migrate
 
 # Iniciar o servidor
@@ -34,9 +27,9 @@ python manage.py runserver
 
 # 4) Iniciar o frontend
 
-# Voltar para o diretório raiz
+# novo terminal
 
-cd ..
+inicie um novo terminal na raiz
 
 # Navegar para o diretório do frontend
 
