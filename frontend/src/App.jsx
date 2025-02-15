@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 function App() {
-  const [postsData, setPostsData] = useState([])
-  const [scrapData, setScrapData] = useState(null) 
+  const [postsData, setPostsData] = useState([])  
+  const [scrapData, setScrapData] = useState(null)  
+  const [inputValue, setInputValue] = useState("")  
 
   const endpoint = `${import.meta.env.VITE_API_URL}posts/`
-  const scrapEndpoint = `${import.meta.env.VITE_API_URL}api/scrap/` 
+  const scrapEndpoint = `${import.meta.env.VITE_API_URL}api/scrap/`
 
-  
   const fetchData = async () => {
     console.log('fetching posts...')
     const response = await axios.get(endpoint)
@@ -19,13 +19,13 @@ function App() {
     return data
   }
 
- 
+  
   const fetchScrapData = async (name) => {
     try {
       console.log('fetching scrap data...')
-      const response = await axios.post(scrapEndpoint, { name })  
+      const response = await axios.post(scrapEndpoint, { name })
       console.log(response)
-      setScrapData(response.data)  
+      setScrapData(response.data) 
     } catch (error) {
       console.error("Erro ao buscar dados do scraping:", error)
     }
@@ -48,11 +48,14 @@ function App() {
     }
   }
 
-  const handleScrapData = (name) => {
-    fetchScrapData(name)  
+  const handleScrapData = () => {
+    fetchScrapData(inputValue) 
   }
 
-  
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value)
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -72,13 +75,16 @@ function App() {
       <h2>Web Scraping</h2>
       <input
         type="text"
+        value={inputValue}
+        onChange={handleInputChange} 
         placeholder="Enter name for scraping"
-        onBlur={(e) => handleScrapData(e.target.value)} 
       />
+      <button onClick={handleScrapData}>Fetch Scraped Data</button>
+      
       {scrapData && (
         <div>
           <h3>Scraping Result:</h3>
-          <p>{scrapData}</p> 
+          <pre>{JSON.stringify(scrapData, null, 2)}</pre>
         </div>
       )}
     </>
@@ -86,57 +92,3 @@ function App() {
 }
 
 export default App
-
-
-/*
-    import { useState, useEffect } from 'react';
-    import axios from 'axios';
-
-    function App() {
-      const [scrapedData, setScrapedData] = useState("");  // Guardando apenas o texto
-      const [inputValue, setInputValue] = useState("");  // Valor do input
-
-      const scrapEndpoint = `${import.meta.env.VITE_API_URL}api/scrap/`;  // Endpoint para o scraping
-
-      // Função para buscar os dados do scraping
-      const fetchScrapData = async (name) => {
-        try {
-          const response = await axios.post(scrapEndpoint, { name });
-          const { scraped_data } = response.data;  // Pegando o texto do scraping
-          setScrapedData(scraped_data);  // Armazenando o texto
-          console.log(scraped_data);  // Apenas para depuração
-        } catch (error) {
-          console.error("Erro ao buscar dados do scraping:", error);
-          setScrapedData("Erro ao buscar os dados.");
-        }
-      };
-
-      // Manipulando a mudança no campo de texto
-      const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-      };
-
-      const handleScrapData = () => {
-        fetchScrapData(inputValue);  // Chama a função de scraping com o nome digitado
-      };
-
-      return (
-        <div>
-          <h1>Web Scraping Example</h1>
-          <input 
-            type="text" 
-            value={inputValue}
-            onChange={handleInputChange} 
-            placeholder="Digite o código para scraping"
-          />
-          <button onClick={handleScrapData}>Obter Dados</button>
-          
-          
-          {scrapedData && <p>{scrapedData}</p>}  
-
-        </div>
-      );
-    }
-
-    export default App;
-*/
