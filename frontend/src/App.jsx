@@ -27,10 +27,11 @@ function App() {
   };
 
   const handleFavoriteData = async () => {
+    console.log(scrapData)
     if (scrapData) {
       const formattedScrapData = {
         code: inputValue,
-        items: scrapData.items.map(item => ({
+        items: scrapData.map(item => ({
           description: item.description,
           value: item.value
         }))
@@ -86,16 +87,16 @@ function App() {
 
       {!isValidCode && <p style={{ color: 'red' }}>Invalid Code. Try Again.</p>}
 
-      {scrapData && isValidCode && (
+      {scrapData && isValidCode &&  (
         <div>
           <h3>Scraping Result:</h3>
-            <ul>
-              {scrapData.items.map((item, index) => (
-                <li key={index}>
-                  <strong>{item.description}:</strong> {item.value}
-                </li>
-              ))}
-            </ul>
+        
+          {scrapData.map(item => (
+            <div>
+                <div> <b>{item.description}</b> {item.value}
+               </div>
+            </div>
+          ))}
         </div>
       )}
     </>

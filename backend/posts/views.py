@@ -32,19 +32,22 @@ class ScrampFavorite(APIView):
 
             if "error" in data or not data:
                 return Response(data, status=400)
+            
+            if not Favorites.objects.filter(code=code).exists():
+                
+                new_favorite = Favorites.objects.create(code = code)
 
-            new_favorite = Favorites.objects.create(code = code)
+                for information in data:
+                    FavoritesComponents.objects.create(
+                        favorites = new_favorite,
+                        value = information['value'],
+                        description = information['description'],
+                        category = information['category']
+                    )
 
-            for information in data:
-                FavoritesComponents.objects.create(
-                    favorites = new_favorite,
-                    value = information['value'],
-                    description = information['description'],
-                    category = information['category']
-                )
-
-            return Response({"success": "Favorito adicionado com sucesso."}, status=201)
-
+                return Response({"success": "Favorito adicionado com sucesso."}, status=201)
+            else:
+                return Response({"error": "already exists"}, status=400)
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
