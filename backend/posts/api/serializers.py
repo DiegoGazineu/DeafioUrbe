@@ -6,12 +6,14 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'name', 'description', 'code')
 
-class FavoriteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Favorites
-        fields = ('code')
-
 class FavoritesComponentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoritesComponents
-        fields = ('favorites', 'value', 'description', 'category')
+        fields = ('value', 'description', 'category')
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    items = FavoritesComponentsSerializer(many=True, read_only=True) 
+
+    class Meta:
+        model = Favorites
+        fields = ('code', 'items') 
