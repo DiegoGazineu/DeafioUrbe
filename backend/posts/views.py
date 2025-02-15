@@ -27,7 +27,7 @@ class ScrampFavorite(APIView):
         try:
             data = page_scram_function(code)
             
-            new_favorite =  Favorites(code)
+            new_favorite = Favorites.objects.create(code = code)
 
             for information in data:
                 FavoritesComponents.objects.create(
@@ -91,7 +91,4 @@ def page_scram_function(code):
     
     except Exception as e:
         return {"error": f"Erro inesperado: {str(e)}"} 
-
-
-    
 

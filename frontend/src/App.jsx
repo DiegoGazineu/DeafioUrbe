@@ -4,10 +4,11 @@ import axios from 'axios'
 function App() {
   const [postsData, setPostsData] = useState([])  
   const [scrapData, setScrapData] = useState(null)  
-  const [inputValue, setInputValue] = useState("")  
+  const [inputValue, setInputValue] = useState("")
 
   const endpoint = `${import.meta.env.VITE_API_URL}posts/`
-  const scrapEndpoint = `${import.meta.env.VITE_API_URL}api/scrap/`
+  const scrapEndpoint = `${import.meta.env.VITE_API_URL}scrap/`
+  const favoriteEndpoint = `${import.meta.env.VITE_API_URL}favorite/`
 
   const fetchData = async () => {
     console.log('fetching posts...')
@@ -23,11 +24,22 @@ function App() {
   const fetchScrapData = async (name) => {
     try {
       console.log('fetching scrap data...')
-      const response = await axios.post(scrapEndpoint, { name })
+      const response = await axios.post(scrapEndpoint, { name }) 
       console.log(response)
-      setScrapData(response.data) 
+      setScrapData(response.data)
     } catch (error) {
       console.error("Erro ao buscar dados do scraping:", error)
+    }
+  }
+
+  const fetchFavoriteData = async (name) => {
+    try {
+      console.log('fetching Favorite data...')
+      const response = await axios.post(favoriteEndpoint, { name }) 
+      console.log(response)
+      setFavoriteData(response.data)
+    } catch (error) {
+      console.error("Erro ao favoritar dados do scraping:", error)
     }
   }
 
@@ -50,6 +62,9 @@ function App() {
 
   const handleScrapData = () => {
     fetchScrapData(inputValue) 
+  }
+  const handleFavoriteData = () => {
+    fetchFavoriteData(inputValue) 
   }
 
   const handleInputChange = (e) => {
@@ -79,7 +94,7 @@ function App() {
         onChange={handleInputChange} 
         placeholder="Enter name for scraping"
       />
-      <button onClick={handleScrapData}>Fetch Scraped Data</button>
+      <button onClick={handleScrapData}>Favoritando Scraped Data</button>
       
       {scrapData && (
         <div>
