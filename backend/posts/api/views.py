@@ -1,10 +1,6 @@
 from rest_framework import viewsets
-from ..models import Post, Favorites, FavoritesComponents
-from .serializers import PostSerializer, FavoriteSerializer, FavoritesComponentsSerializer
-
-class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+from ..models import Favorites, FavoritesComponents
+from .serializers import  FavoriteSerializer, FavoritesComponentsSerializer
 
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Favorites.objects.all()
