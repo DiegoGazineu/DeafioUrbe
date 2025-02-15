@@ -13,11 +13,15 @@ class PageScramp(APIView):
 
         try:
             data = page_scram_function(code)
+            # Verifica se os dados retornados não contêm erro e não estão vazios
+            if "error" in data or not data:
+                return Response(data, status=400)  # Retorna um erro de cliente, pois não há dados válidos
+
             return Response(data, status=200)
 
         except Exception as e:
             return Response({"error": str(e)}, status=500)
-        
+
 class ScrampFavorite(APIView):
     def post(self, request, *args, **kwargs):
         code = request.data.get("name")
@@ -26,19 +30,21 @@ class ScrampFavorite(APIView):
 
         try:
             data = page_scram_function(code)
-            
+            # Verifica se os dados retornados não contêm erro e não estão vazios
+            if "error" in data or not data:
+                return Response(data, status=400)
 
-            new_favorite = Favorites.objects.create(code=code)
+            new_favorite = Favorites.objects.create(code = code)
 
             for information in data:
                 FavoritesComponents.objects.create(
-                    favorites=new_favorite,  
-                    value=information['value'],
-                    description=information['description'],
-                    category=information['category']
+                    favorites = new_favorite,
+                    value = information['value'],
+                    description = information['description'],
+                    category = information['category']
                 )
 
-            return Response({"message": "Favoritos salvos com sucesso"}, status=201)
+            return Response({"success": "Favorito adicionado com sucesso."}, status=201)
 
         except Exception as e:
             return Response({"error": str(e)}, status=500)
@@ -56,29 +62,38 @@ def page_scram_function(code):
         currentStatus = soup.find('div', attrs={'class': 'wrapper indicators'}).find_all(attrs={'class': 'indicators__box'})
         
         if currentStatus:
-            data = []
-            categories = {
-                "Valor em caixa": "caixa",
-                "Liquidez média diária": "media",
-                "Val. Patrimonial p/Cota": "patrimonial",
-                "N° de Cotistas": "cotistas",
-                "Participações no IFIX": "ifix"
-            }
-            
-            for element in currentStatus:
-                line = element.find_all('p')
+            try:
+                data = []
+                categories = {
+                    "Valor em caixa": "caixa",
+                    "Liquidez média diária": "media",
+                    "Val. Patrimonial p/Cota": "patrimonial",
+                    "N° de Cotistas": "cotistas",
+                    "Participações no IFIX": "ifix"
+                }
+                
+                for element in currentStatus:
+                    line = element.find_all('p')
 
-                value = line[0].text
-                description = line[1].text
-                category = categories.get(description)
+                    if len(line) >= 2: 
+                        value = line[0].text.strip()
+                        description = line[1].text.strip()
+                        category = categories.get(description)
 
-                data.append({
-                    "value": value,
-                    "description": description,
-                    "category": category
-                })
+                        if value and description and category:
+                            data.append({
+                                "value": value,
+                                "description": description,
+                                "category": category
+                            })
 
-            return data  
+                if not data:
+                    return {"error": "Nenhum dado válido encontrado."}
+
+                return data  
+
+            except Exception as e:
+                return {"error": "Dados incompletos ou inválidos."}  
 
         else:
             return {"error": "Não foi possível encontrar os dados."} 
@@ -87,4 +102,4 @@ def page_scram_function(code):
         return {"error": f"Erro ao acessar a página: {str(e)}"}  
     
     except Exception as e:
-        return {"error": f"Erro inesperado: {str(e)}"} 
+        return {"error": f"Erro inesperado: {str(e)}"}
