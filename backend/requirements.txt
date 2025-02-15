@@ -3,9 +3,4 @@ requests==2.23.3
 beautifulsoup4=4.13.3
 django_restframework=0.0.1
 django_cors_headers=4.7.0
-charset_normalizer=3.4.1
-pip=25.0.1
-sqlparse=0.5.3
-idna=3.10
 soupsieve=2.6
-certifi=2025.1.31
