@@ -3,11 +3,8 @@
 python -m venv env
 
 # Ativar o ambiente virtual
-# Windows
-# source env\\Scripts\\activate
-# macOS/Linux
 
-source env/bin/activate
+cd env/Scripts/activate
 
 # Voltar para a raiz do projeto
 
