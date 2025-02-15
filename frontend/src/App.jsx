@@ -3,7 +3,8 @@ import axios from 'axios'
 
 function App() {
   const [postsData, setPostsData] = useState([])  
-  const [scrapData, setScrapData] = useState(null)  
+  const [scrapData, setScrapData] = useState(null)
+  const [favoriteData, setFavoriteData] = useState(null)  // Adicionando estado para favoritos
   const [inputValue, setInputValue] = useState("")
 
   const endpoint = `${import.meta.env.VITE_API_URL}posts/`
@@ -20,7 +21,6 @@ function App() {
     return data
   }
 
-  
   const fetchScrapData = async (name) => {
     try {
       console.log('fetching scrap data...')
@@ -32,12 +32,13 @@ function App() {
     }
   }
 
+  // Função de busca dos dados de favoritos
   const fetchFavoriteData = async (name) => {
     try {
-      console.log('fetching Favorite data...')
+      console.log('fetching favorite data...')
       const response = await axios.post(favoriteEndpoint, { name }) 
       console.log(response)
-      setFavoriteData(response.data)
+      setFavoriteData(response.data)  // Atualizando o estado com os dados favoritos
     } catch (error) {
       console.error("Erro ao favoritar dados do scraping:", error)
     }
@@ -60,9 +61,12 @@ function App() {
     }
   }
 
+  // Função para acionar o scraping
   const handleScrapData = () => {
     fetchScrapData(inputValue) 
   }
+
+  // Função para acionar o favoritar
   const handleFavoriteData = () => {
     fetchFavoriteData(inputValue) 
   }
@@ -94,12 +98,20 @@ function App() {
         onChange={handleInputChange} 
         placeholder="Enter name for scraping"
       />
-      <button onClick={handleScrapData}>Favoritando Scraped Data</button>
+      <button onClick={handleScrapData}>Scrape Data</button>
+      <button onClick={handleFavoriteData}>Favorite Scraped Data</button>
       
       {scrapData && (
         <div>
           <h3>Scraping Result:</h3>
           <pre>{JSON.stringify(scrapData, null, 2)}</pre>
+        </div>
+      )}
+
+      {favoriteData && (
+        <div>
+          <h3>Favorite Result:</h3>
+          <pre>{JSON.stringify(favoriteData, null, 2)}</pre>
         </div>
       )}
     </>
