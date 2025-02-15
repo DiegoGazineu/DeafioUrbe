@@ -15,7 +15,7 @@ function App() {
     if (scrapData) {
       fetchFavoriteData(inputValue, setFavoriteData) 
     } else {
-      alert("Você precisa realizar o scraping antes de favoritar.")
+      alert("Scrape needed.")
     }
   }
 
@@ -41,7 +41,7 @@ function App() {
         <button onClick={handleFavoriteData}>Favorite Scraped Data</button>
       )}
 
-      {!isValidCode && <p style={{ color: 'red' }}>Código inválido. Tente novamente.</p>}
+      {!isValidCode && <p style={{ color: 'red' }}>Invalid Code. Try Again.</p>}
 
       {scrapData && isValidCode && (
         <div>

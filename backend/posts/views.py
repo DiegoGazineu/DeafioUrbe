@@ -13,9 +13,8 @@ class PageScramp(APIView):
 
         try:
             data = page_scram_function(code)
-            # Verifica se os dados retornados não contêm erro e não estão vazios
             if "error" in data or not data:
-                return Response(data, status=400)  # Retorna um erro de cliente, pois não há dados válidos
+                return Response(data, status=400)  
 
             return Response(data, status=200)
 
@@ -30,7 +29,7 @@ class ScrampFavorite(APIView):
 
         try:
             data = page_scram_function(code)
-            # Verifica se os dados retornados não contêm erro e não estão vazios
+
             if "error" in data or not data:
                 return Response(data, status=400)
 

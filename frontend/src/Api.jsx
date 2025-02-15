@@ -17,7 +17,7 @@ export const fetchScrapData = async (name, setScrapData, setIsValidCode) => {
       setIsValidCode(true) 
     }
   } catch (error) {
-    console.error("Erro ao buscar dados do scraping:", error)
+    console.error("Error finding scrap data:", error)
     setScrapData(null)  
     setIsValidCode(false)
   }
@@ -25,11 +25,11 @@ export const fetchScrapData = async (name, setScrapData, setIsValidCode) => {
 
 export const fetchFavoriteData = async (name, setFavoriteData) => {
   try {
-    console.log('fetching favorite data...')
+    console.log('fetching favorite data')
     const response = await axios.post(favoriteEndpoint, { name })
     console.log(response)
     setFavoriteData(response.data) 
   } catch (error) {
-    console.error("Erro ao favoritar dados do scraping:", error)
+    console.error("Error favorite process:", error)
   }
 }
